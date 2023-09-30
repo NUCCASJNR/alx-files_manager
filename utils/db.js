@@ -76,7 +76,7 @@ class DBClient {
       const hashedpwd = generateHash(password);
       const result = await this.client.db().collection('users').insertOne({ email, password: hashedpwd });
       const id = `${result.insertedId}`;
-      return ({ _id: id, email });
+      return ({ _id: id, email: email });
     } catch (error) {
       throw new Error(error);
     }
