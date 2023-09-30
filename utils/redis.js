@@ -4,13 +4,13 @@
 * Contains a redisClient Class that establishes a connection
  */
 
-import redis from 'redis';
+import { createClient }from 'redis';
 
 const redisPort = 6379;
 const redisHost = 'localhost';
 class RedisClient {
   constructor() {
-    this.client = redis.createClient(redisPort, redisHost);
+    this.client = createClient(redisPort, redisHost);
     this.client.on('error', (error) => {
       console.log(error);
     });
@@ -31,9 +31,10 @@ class RedisClient {
       });
     });
   }
+
   async set(key, value, duration) {
     return new Promise((resolve, reject) => {
-      this.client.setex(key, duration, value, (error, result) => {
+      this.client.set(key, value, 'EX', duration, (error, result) => {
         if (error) {
           reject(error);
         } else {
