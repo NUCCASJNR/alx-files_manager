@@ -6,21 +6,19 @@
 
 import { createClient } from 'redis';
 
-const redisPort = 6379;
-const redisHost = 'localhost';
 class RedisClient {
-  constructor() {
-    this.client = createClient(redisPort, redisHost);
+  constructor () {
+    this.client = createClient();
     this.client.on('error', (error) => {
       console.log(error);
     });
   }
 
-  isAlive() {
+  isAlive () {
     return !!this.client;
   }
 
-  async get(key) {
+  async get (key) {
     return new Promise((resolve, reject) => {
       this.client.get(key, (error, result) => {
         if (error) {
@@ -32,7 +30,7 @@ class RedisClient {
     });
   }
 
-  async set(key, value, duration) {
+  async set (key, value, duration) {
     return new Promise((resolve, reject) => {
       this.client.set(key, value, 'EX', duration, (error, result) => {
         if (error) {
@@ -44,7 +42,7 @@ class RedisClient {
     });
   }
 
-  async del(key) {
+  async del (key) {
     return new Promise((resolve, reject) => {
       this.client.del(key, (error, result) => {
         if (error) {
