@@ -5,6 +5,7 @@
 * Contains a DBClient Class that establishes a Database connection
  */
 
+/* eslint-disable space-before-function-paren */
 import { MongoClient } from 'mongodb';
 
 const MongodbHost = process.env.DB_HOST || '127.0.0.1';
@@ -13,7 +14,7 @@ const Database = process.env.DB_DATABASE || 'files_manager';
 const dbUrl = `mongodb://${MongodbHost}:${MongodbPort}/${Database}`;
 
 class DBClient {
-  constructor() {
+  constructor () {
     this.client = new MongoClient(dbUrl, { useUnifiedTopology: true });
     this.client.connect();
   }
@@ -22,14 +23,14 @@ class DBClient {
   Returns True if database connection was successful
   And False if otherwise
    */
-  isAlive() {
-    return !!this.client;
+  isAlive () {
+    return this.client.isConnected();
   }
 
   /*
   Returns the numbers of documents in the users collections
    */
-  async nbUsers() {
+  async nbUsers () {
     try {
       return await this.client.db().collection('users').countDocuments();
     } catch (error) {
@@ -40,7 +41,7 @@ class DBClient {
   /*
    Returns the numbers of documents in the files collections
    */
-  async nbFiles() {
+  async nbFiles () {
     try {
       return await this.client.db().collection('files').countDocuments();
     } catch (error) {
