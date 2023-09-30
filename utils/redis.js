@@ -3,7 +3,7 @@
 /*
 * Contains a redisClient Class that establishes a connection
  */
-
+/* eslint-disable space-before-function-paren */
 import { createClient } from 'redis';
 
 class RedisClient {
