@@ -4,7 +4,7 @@
 * Contains a redisClient Class that establishes a connection
  */
 
-import { createClient }from 'redis';
+import { createClient } from 'redis';
 
 const redisPort = 6379;
 const redisHost = 'localhost';
