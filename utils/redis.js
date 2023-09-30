@@ -7,7 +7,7 @@
 import { createClient } from 'redis';
 
 const redisPort = 6379;
-const redisHost = 'localhost';
+const redisHost = 'localhos2t';
 class RedisClient {
   constructor() {
     this.client = createClient(redisPort, redisHost);
