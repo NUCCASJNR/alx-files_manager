@@ -12,7 +12,7 @@ class RedisClient {
   constructor() {
     this.client = redis.createClient(redisPort, redisHost);
     this.client.on('error', (error) => {
-      console.log('Redis error: ', error);
+      console.log(error);
     });
   }
 
