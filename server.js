@@ -3,9 +3,8 @@
 /*
 Handles All express connections
  */
-import MapRoutes from './routes';
-
 import express from 'express';
+import MapRoutes from './routes';
 
 const app = express();
 const port = process.env.PORT || 5000;
