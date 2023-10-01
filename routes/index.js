@@ -10,7 +10,7 @@ import UsersController from '../controllers/UsersController';
 const MapRoutes = (app) => {
   app.get('/status', AppController.getStatus);
   app.get('/stats', AppController.getStats);
-  app.post('/users', UsersController.PostNewUser);
+  app.post('/users', UsersController.postNew);
 };
 
 export default MapRoutes;

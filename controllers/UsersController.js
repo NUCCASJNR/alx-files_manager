@@ -8,7 +8,7 @@ User controller
 import dbClient from '../utils/db';
 
 class UsersController {
-  static async PostNewUser(req, res) {
+  static async postNew(req, res) {
     const { email, password } = req.body;
     if (!email) {
       res.status(400).json({ error: 'Missing email' });
