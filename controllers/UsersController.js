@@ -27,5 +27,4 @@ class UsersController {
     res.status(201).json(newUser);
   }
 }
-
 export default UsersController;
