@@ -12,7 +12,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
-import { redisClient } from './redis';
+import { redisClient } from './redis.js';
 
 const MongodbHost = process.env.DB_HOST || '127.0.0.1';
 const MongodbPort = process.env.DB_PORT || 27017;
