@@ -12,7 +12,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
-import { redisClient } from './redis.js';
+import { redisClient } from './redis';
 
 const MongodbHost = process.env.DB_HOST || '127.0.0.1';
 const MongodbPort = process.env.DB_PORT || 27017;
@@ -109,7 +109,7 @@ class DBClient {
       if (user) {
         const authKey = generateUuid();
         const token = `auth_${authKey}`;
-        await redisClient.set(token, user._id.toString(), 24 * 60 * 60);
+        await redisClient.set(token, user._id.toString(), 86,400);
         return ({ token: authKey });
       }
     } catch (error) {
