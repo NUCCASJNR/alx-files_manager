@@ -109,7 +109,7 @@ class DBClient {
       if (user) {
         const authKey = generateUuid();
         const token = `auth_${authKey}`;
-        await redisClient.set(token, user._id.toString(), 86,400);
+        await redisClient.set(token, user._id.toString(), 24 * 60 * 60);
         return ({ token: authKey });
       }
     } catch (error) {
