@@ -33,7 +33,10 @@ const ObjId = (id) => {
 };
 class DBClient {
   constructor () {
-    this.client = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    this.client = new MongoClient(dbUrl, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
     this.client.connect();
   }
 
