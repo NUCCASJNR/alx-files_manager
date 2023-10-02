@@ -7,6 +7,8 @@
 
 /* eslint-disable space-before-function-paren */
 /* eslint-disable comma-dangle */
+/* eslint-disable consistent-return */
+
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
@@ -113,7 +115,6 @@ class DBClient {
     } catch (error) {
       throw new Error(error);
     }
-    return '';
   }
 
   async FindUserWithToken(token) {
@@ -130,7 +131,6 @@ class DBClient {
     } catch (error) {
       throw new Error(error);
     }
-    return '';
   }
 }
 
