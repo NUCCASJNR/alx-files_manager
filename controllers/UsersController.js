@@ -26,5 +26,15 @@ class UsersController {
     const newUser = await dbClient.addUser(email, password);
     res.status(201).json(newUser);
   }
+
+  static async getMe(req, res) {
+    const token = req.headers['x-token'];
+    const user = await dbClient.FindUserWithToken(token);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
+  }
 }
 export default UsersController;

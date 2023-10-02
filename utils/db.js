@@ -6,8 +6,11 @@
  */
 
 /* eslint-disable space-before-function-paren */
-import { MongoClient } from 'mongodb';
+/* eslint-disable comma-dangle */
+import { MongoClient, ObjectId } from 'mongodb';
 import { createHash } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
+import { redisClient } from './redis';
 
 const MongodbHost = process.env.DB_HOST || '127.0.0.1';
 const MongodbPort = process.env.DB_PORT || 27017;
@@ -18,6 +21,19 @@ const generateHash = (password) => {
   const Sha1 = createHash('sha1');
   Sha1.update(password);
   return Sha1.digest('hex');
+};
+
+/*
+Generates a unique uuid
+ */
+const generateUuid = () => uuidv4();
+
+const ObjId = (id) => {
+  try {
+    return ObjectId(id);
+  } catch (error) {
+    return error;
+  }
 };
 class DBClient {
   constructor () {
@@ -80,6 +96,42 @@ class DBClient {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async findMatchUser(email, password) {
+    try {
+      const query = {
+        email,
+        password: generateHash(password)
+      };
+      const user = await this.client.db().collection('users').findOne(query);
+      if (user) {
+        const authKey = generateUuid();
+        const token = `auth_${authKey}`;
+        await redisClient.set(token, user._id.toString(), 24 * 60 * 60);
+        return ({ token: authKey });
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+    return '';
+  }
+
+  async FindUserWithToken(token) {
+    try {
+      const authToken = `auth_${token}`;
+      const user = await redisClient.get(authToken);
+      if (user) {
+        const objectIdUserId = ObjId(user);
+        const FilteredUser = await this.client.db().collection('users').findOne({ _id: objectIdUserId });
+        if (FilteredUser) {
+          return ({ id: FilteredUser._id.toString(), email: FilteredUser.email });
+        }
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+    return '';
   }
 }
 
