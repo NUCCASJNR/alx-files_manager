@@ -106,7 +106,7 @@ class DBClient {
         email,
         password: generateHash(password)
       };
-      const user = await this.client.db().collection('users').findOne(query);
+      const user = await this.client.db().collection('users').findOne({ query });
       if (user) {
         const authKey = generateUuid();
         const token = `auth_${authKey}`;
