@@ -78,7 +78,7 @@ class DBClient {
    */
   async findUser (email) {
     try {
-      return await this.client.db().collection('users').findOne(email);
+      return await this.client.db().collection('users').findOne({email});
     } catch (error) {
       throw new Error(error);
     }
