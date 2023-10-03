@@ -8,6 +8,7 @@
 /* eslint-disable space-before-function-paren */
 /* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
+/* eslint-disable prefer-destructuring */
 
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
@@ -24,7 +25,7 @@ const generateHash = (password) => sha1(password);
 /*
 Generates a unique uuid
  */
-const generateUuid = () => uuidv4();
+export const generateUuid = () => uuidv4();
 
 const ObjId = (id) => {
   try {
@@ -128,6 +129,70 @@ class DBClient {
           return ({ id: FilteredUser._id.toString(), email: FilteredUser.email });
         }
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async findFolder(parentId, query = {}) {
+    try {
+      const objId = ObjId(parentId);
+      const filter = { _id: objId, ...query };
+      const result = await this.client.db().collection('files').findOne(filter);
+      if (result) {
+        return (result);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async createFolder (userId, name, type, parentId, isPublic) {
+    try {
+      const query = {
+        userId,
+        name,
+        type,
+        parentId: parentId || 0,
+        isPublic: isPublic || false,
+      };
+      const idan = await this.client.db().collection('files').insertOne(query);
+      const inserted = idan.insertedId;
+      const res = await this.findFolder(inserted);
+      return ({
+        id: res._id,
+        userId: res.userId,
+        name: res.name,
+        type: res.type,
+        isPublic: res.isPublic,
+        parentId: res.parentId
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async createFile(userId, name, type, isPublic, parentId, localPath) {
+    try {
+      const query = {
+        userId,
+        name,
+        type,
+        isPublic: isPublic || false,
+        parentId: parentId || 0,
+        localPath,
+      };
+      const data = await this.client.db().collection('files').insertOne(query);
+      const insertedId = data.insertedId;
+      const result = await this.findFolder(insertedId);
+      return ({
+        id: result._id,
+        userId: result.userId,
+        name: result.name,
+        type: result.type,
+        isPublic: result.isPublic,
+        parentId: result.parentId,
+      });
     } catch (error) {
       throw new Error(error);
     }
