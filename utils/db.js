@@ -9,7 +9,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable prefer-destructuring */
-/* eslint-disable object-shorthand */
+
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
@@ -78,7 +78,7 @@ class DBClient {
    */
   async findUser (email) {
     try {
-      return await this.client.db().collection('users').findOne({ email });
+      return await this.client.db().collection('users').findOne(email);
     } catch (error) {
       throw new Error(error);
     }
@@ -92,7 +92,7 @@ class DBClient {
   async addUser(email, password) {
     try {
       const hashedpwd = generateHash(password);
-      const result = await this.client.db().collection('users').insertOne({ email: email, password: hashedpwd });
+      const result = await this.client.db().collection('users').insertOne({ email, password: hashedpwd });
       const id = `${result.insertedId}`;
       return ({ id, email });
     } catch (error) {
@@ -106,7 +106,7 @@ class DBClient {
         email,
         password: generateHash(password)
       };
-      const user = await this.client.db().collection('users').findOne({ query });
+      const user = await this.client.db().collection('users').findOne(query);
       if (user) {
         const authKey = generateUuid();
         const token = `auth_${authKey}`;
@@ -138,7 +138,7 @@ class DBClient {
     try {
       const objId = ObjId(parentId);
       const filter = { _id: objId, ...query };
-      const result = await this.client.db().collection('files').findOne({ filter });
+      const result = await this.client.db().collection('files').findOne(filter);
       if (result) {
         return (result);
       }
