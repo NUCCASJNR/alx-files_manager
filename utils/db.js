@@ -138,7 +138,7 @@ class DBClient {
     try {
       const objId = ObjId(parentId);
       const filter = { _id: objId, ...query };
-      const result = await this.client.db().collection('files').findOne(filter);
+      const result = await this.client.db().collection('files').findOne({ filter });
       if (result) {
         return (result);
       }
