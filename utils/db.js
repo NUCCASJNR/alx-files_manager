@@ -9,7 +9,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable prefer-destructuring */
-
+/* eslint-disable object-shorthand */
 import { MongoClient, ObjectId } from 'mongodb';
 import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
@@ -92,7 +92,7 @@ class DBClient {
   async addUser(email, password) {
     try {
       const hashedpwd = generateHash(password);
-      const result = await this.client.db().collection('users').insertOne({ email, password: hashedpwd });
+      const result = await this.client.db().collection('users').insertOne({ email: email, password: hashedpwd });
       const id = `${result.insertedId}`;
       return ({ id, email });
     } catch (error) {
