@@ -7,7 +7,7 @@ Handles All API routes
 import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
-import FilesController from "../controllers/FilesController";
+import FilesController from '../controllers/FilesController';
 
 const MapRoutes = (app) => {
   app.get('/status', AppController.getStatus);
