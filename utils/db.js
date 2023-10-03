@@ -31,7 +31,7 @@ const ObjId = (id) => {
   try {
     return ObjectId(id);
   } catch (error) {
-    return error;
+    throw new Error(error);
   }
 };
 class DBClient {
