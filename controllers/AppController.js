@@ -1,5 +1,5 @@
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable space-before-function-paren */
+/* eslint-disable import/no-named-as-default, space-before-function-paren */
+
 /*
 @author: Al-Areef
 Controller
@@ -10,15 +10,15 @@ import dbClient from '../utils/db';
 
 class AppController {
   static getStatus (req, res) {
-    const redisStatus = redisClient.isAlive();
-    const dbStatus = dbClient.isAlive();
-    res.status(200).json({ redis: redisStatus, db: dbStatus });
+    const redis = redisClient.isAlive();
+    const db = dbClient.isAlive();
+    res.status(200).json({ redis, db });
   }
 
   static async getStats (req, res) {
-    const nbUsers = await dbClient.nbUsers();
-    const nbFiles = await dbClient.nbFiles();
-    res.status(200).json({ users: nbUsers, files: nbFiles });
+    const users = await dbClient.nbUsers();
+    const files = await dbClient.nbFiles();
+    res.status(200).json({ users, files });
   }
 }
 
