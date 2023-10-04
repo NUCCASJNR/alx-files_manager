@@ -9,9 +9,10 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable prefer-destructuring */
+/* eslint-disable no-return-await */
 
 import { MongoClient, ObjectId } from 'mongodb';
-import { createHash } from 'crypto';
+import sha1 from 'sha1';
 import { v4 as uuidv4 } from 'uuid';
 import { redisClient } from './redis';
 
@@ -20,11 +21,8 @@ const MongodbPort = process.env.DB_PORT || 27017;
 const Database = process.env.DB_DATABASE || 'files_manager';
 const dbUrl = `mongodb://${MongodbHost}:${MongodbPort}/${Database}`;
 
-const generateHash = (password) => {
-  const Sha1 = createHash('sha1');
-  Sha1.update(password);
-  return Sha1.digest('hex');
-};
+const generateHash = (password) => sha1(password);
+
 /*
 Generates a unique uuid
  */
@@ -199,6 +197,11 @@ class DBClient {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async paginate(pipeline) {
+    const cursor = await this.client.db().collection('files').aggregate(pipeline);
+    return await cursor.toArray();
   }
 }
 

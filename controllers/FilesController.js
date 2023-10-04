@@ -67,6 +67,51 @@ class FilesController {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+
+  static async getShow(req, res) {
+    const { id } = req.params;
+    const token = req.headers['x-token'];
+    const user = await dbClient.FindUserWithToken(token);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const UserId = user.id.toString();
+    const query = await dbClient.findFolder(id, { userId: UserId });
+    if (query) {
+      res.status(200).json(query);
+    } else {
+      return res.status(404).json({ error: 'Not found' });
+    }
+  }
+
+  static async getIndex(req, res) {
+    const parentId = req.query.parentId || '0'; // Default to 0 if parentId is not provided
+    const page = parseInt(req.query.page) || 0; // Default to page 0 if not provided
+
+    const token = req.headers['x-token'];
+    const user = await dbClient.FindUserWithToken(token);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const pageSize = 20;
+    const skip = page * pageSize;
+    const query = {
+      parentId,
+    };
+    const pipeLine = [
+      {
+        $match: query,
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: pageSize,
+      }
+    ];
+    const result = await dbClient.paginate(pipeLine);
+    res.status(200).json(result);
+  }
 }
 
 export default FilesController;
