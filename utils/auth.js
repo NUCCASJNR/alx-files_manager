@@ -168,14 +168,14 @@ Finds a user in the users collection using the email provided
     const updatedDoc = {
       $set: { isPublic: true }
     };
-    const result = await dbClient.client.db().collection('files').findOne(filter);
     await dbClient.client.db().collection('files').updateOne(filter, updatedDoc);
+    const result = await dbClient.client.db().collection('files').findOne(filter);
     return ({
       id: result._id,
       userId: result.userId,
       name: result.name,
       type: result.type,
-      isPublic: true,
+      isPublic: result.isPublic,
       parentId: result.parentId,
     });
   }
@@ -185,14 +185,14 @@ Finds a user in the users collection using the email provided
     const updatedDoc = {
       $set: { isPublic: false }
     };
-    const result = await dbClient.client.db().collection('files').findOne(filter);
     await dbClient.client.db().collection('files').updateOne(filter, updatedDoc);
+    const result = await dbClient.client.db().collection('files').findOne(filter);
     return ({
       id: result._id,
       userId: result.userId,
       name: result.name,
       type: result.type,
-      isPublic: false,
+      isPublic: result.isPublic,
       parentId: result.parentId,
     });
   }
