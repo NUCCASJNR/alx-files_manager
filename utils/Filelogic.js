@@ -1,11 +1,11 @@
 #!/usr/bin/node
 /* eslint-disable comma-dangle */
 
-import { join } from 'path';
+import {join} from 'path';
 
 const fs = require('fs').promises;
 
-const { mkdir, writeFile } = fs;
+const { mkdir, writeFile, readFile } = fs;
 
 export const CreateDirectory = async (path) => {
   await mkdir(path, { recursive: true });
@@ -20,7 +20,12 @@ export const SaveFileLocally = async (BaseDir, fileName, FileContent) => {
   return localPath;
 };
 
+export const ReadFileContent = async (fileName) => {
+  return await readFile(fileName)
+}
+
 export default {
   CreateDirectory,
-  SaveFileLocally
+  SaveFileLocally,
+  ReadFileContent
 };

@@ -8,7 +8,7 @@ Files controller
 
 import { generateUuid, authClient } from '../utils/auth';
 
-import { CreateDirectory, SaveFileLocally } from '../utils/logic';
+import { CreateDirectory, SaveFileLocally } from '../utils/Filelogic';
 
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
 class FilesController {
@@ -120,13 +120,12 @@ class FilesController {
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    const query = await authClient.findFolder(id)
+    const query = await authClient.findFolder(id);
     if (!query) {
       return res.status(404).json({ error: 'Not found' });
-    } else {
-      const result = await authClient.publish(id);
-      res.status(200).json(result)
     }
+    const result = await authClient.publish(id);
+    res.status(200).json(result);
   }
 
   static async putUnpublish(req, res) {
@@ -136,13 +135,12 @@ class FilesController {
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    const query = await authClient.findFolder(id)
+    const query = await authClient.findFolder(id);
     if (!query) {
       return res.status(404).json({ error: 'Not found' });
-    } else {
-      const result = await authClient.Unpublish(id);
-      res.status(200).json(result);
     }
+    const result = await authClient.Unpublish(id);
+    res.status(200).json(result);
   }
 }
 
