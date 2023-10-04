@@ -9,7 +9,7 @@ import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
 
-const MapRoutes = (app) => {
+const mapRoutes = (app) => {
   app.get('/status', AppController.getStatus);
   app.get('/stats', AppController.getStats);
   app.post('/users', UsersController.postNew);
@@ -23,4 +23,4 @@ const MapRoutes = (app) => {
   app.put('/files:id/unpublish', FilesController.putUnpublish);
 };
 
-export default MapRoutes;
+export default mapRoutes;
