@@ -1,7 +1,7 @@
 #!/usr/in/node
 /* eslint-disable comma-dangle */
 /* eslint-disable  object-curly-newline */
-/* eslint-disable space-before-function-paren */
+/* eslint-disable space-before-function-paren, consistent-return, radix  */
 /*
 Files controller
  */
@@ -85,8 +85,8 @@ class FilesController {
   }
 
   static async getIndex(req, res) {
-    const parentId = req.query.parentId || '0'; // Default to 0 if parentId is not provided
-    const page = parseInt(req.query.page) || 0; // Default to page 0 if not provided
+    const parentId = req.query.parentId || 0;
+    const page = parseInt(req.query.page) || 0;
 
     const token = req.headers['x-token'];
     const user = await dbClient.FindUserWithToken(token);
