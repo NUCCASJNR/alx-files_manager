@@ -5,7 +5,7 @@
 User controller
  */
 
-import dbClient from '../utils/db';
+import authClient from "../utils/auth";
 
 class UsersController {
   static async postNew(req, res) {
@@ -18,18 +18,18 @@ class UsersController {
       res.status(400).json({ error: 'Missing password' });
       return;
     }
-    const searchUser = await dbClient.findUser({ email });
+    const searchUser = await authClient.findUser({ email });
     if (searchUser) {
       res.status(400).json({ error: 'Already exist' });
       return;
     }
-    const newUser = await dbClient.addUser(email, password);
+    const newUser = await authClient.addUser(email, password);
     res.status(201).json(newUser);
   }
 
   static async getMe(req, res) {
     const token = req.headers['x-token'];
-    const user = await dbClient.FindUserWithToken(token);
+    const user = await authClient.FindUserWithToken(token);
     if (user) {
       res.status(200).json(user);
     } else {

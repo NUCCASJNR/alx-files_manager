@@ -5,7 +5,7 @@
 Auth Controller to handle Authorization
  */
 
-import dbClient from '../utils/db';
+import authClient from "../utils/auth";
 import redisClient from '../utils/redis';
 
 class AuthController {
@@ -19,7 +19,7 @@ class AuthController {
       const encodedCredentials = authHeader.split(' ')[1];
       const credentials = Buffer.from(encodedCredentials, 'base64').toString('utf-8');
       const [email, password] = credentials.split(':');
-      const user = await dbClient.findMatchUser(email, password);
+      const user = await authClient.findMatchUser(email, password);
       if (!user) {
         res.status(401).json({ error: 'Unauthorized' });
         return;
