@@ -110,7 +110,7 @@ class FilesController {
       }
     ];
     const result = await dbClient.paginate(pipeLine);
-    res.status(200).json(result);
+    res.json(result);
   }
 }
 
