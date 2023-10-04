@@ -110,7 +110,39 @@ class FilesController {
       }
     ];
     const result = await dbClient.paginate(pipeLine);
-    res.json(result);
+    res.status(200).json(result);
+  }
+
+  static async putPublish(req, res) {
+    const { id } = req.params;
+    const token = req.headers['x-token'];
+    const user = await dbClient.FindUserWithToken(token);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const query = await dbClient.findFolder(id)
+    if (!query) {
+      return res.status(404).json({ error: 'Not found' });
+    } else {
+      const result = await dbClient.publish(id);
+      res.status(200).json(result)
+    }
+  }
+
+  static async putUnpublish(req, res) {
+    const { id } = req.params;
+    const token = req.headers['x-token'];
+    const user = await dbClient.FindUserWithToken(token);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const query = await dbClient.findFolder(id)
+    if (!query) {
+      return res.status(404).json({ error: 'Not found' });
+    } else {
+      const result = await dbClient.Unpublish(id);
+      res.status(200).json(result);
+    }
   }
 }
 
