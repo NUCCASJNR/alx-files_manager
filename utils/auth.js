@@ -7,16 +7,15 @@
 
 /* eslint-disable space-before-function-paren */
 /* eslint-disable comma-dangle */
-/* eslint-disable consistent-return */
+/* eslint-disable consistent-return, class-methods-use-this */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-return-await */
 
 import sha1 from 'sha1';
-import {v4 as uuidv4} from 'uuid';
-import {redisClient} from './redis';
+import { v4 as uuidv4 } from 'uuid';
+import { ObjectId } from 'mongodb';
+import { redisClient } from './redis';
 import { dbClient } from './db';
-import {ObjectId} from "mongodb";
-
 
 const generateHash = (password) => sha1(password);
 
@@ -39,7 +38,7 @@ Finds a user in the users collection using the email provided
  */
   async findUser (email) {
     try {
-        return await dbClient.client.db().collection('users').findOne(email);
+      return await dbClient.client.db().collection('users').findOne(email);
     } catch (error) {
       throw new Error(error);
     }
@@ -165,21 +164,39 @@ Finds a user in the users collection using the email provided
   }
 
   async publish(id) {
-    const filter = { _id: ObjId(id) }
+    const filter = { _id: ObjId(id) };
     const updatedDoc = {
       $set: { isPublic: true }
-    }
-    return await dbClient.client.db().collection('files').updateOne(filter, updatedDoc)
+    };
+    const result = await dbClient.client.db().collection('files').findOne(filter);
+    await dbClient.client.db().collection('files').updateOne(filter, updatedDoc);
+    return ({
+      id: result._id,
+      userId: result.userId,
+      name: result.name,
+      type: result.type,
+      isPublic: true,
+      parentId: result.parentId,
+    });
   }
 
   async Unpublish(id) {
-    const filter = { _id: ObjId(id) }
+    const filter = { _id: ObjId(id) };
     const updatedDoc = {
       $set: { isPublic: false }
-    }
-    return await dbClient.client.db().collection('files').updateOne(filter, updatedDoc)
+    };
+    const result = await dbClient.client.db().collection('files').findOne(filter);
+    await dbClient.client.db().collection('files').updateOne(filter, updatedDoc);
+    return ({
+      id: result._id,
+      userId: result.userId,
+      name: result.name,
+      type: result.type,
+      isPublic: false,
+      parentId: result.parentId,
+    });
   }
 }
 
-export const authClient= new Auth()
-export default authClient
+export const authClient = new Auth();
+export default authClient;

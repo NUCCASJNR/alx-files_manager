@@ -8,7 +8,7 @@ Files controller
 
 import { generateUuid, authClient } from '../utils/auth';
 
-import { CreateDirectory, SaveFileLocally } from '../utils/Filelogic';
+import { CreateDirectory, SaveFileLocally, GetMimeType, ReadFileContent } from '../utils/Filelogic';
 
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
 class FilesController {
@@ -141,6 +141,35 @@ class FilesController {
     }
     const result = await authClient.Unpublish(id);
     res.status(200).json(result);
+  }
+
+  static async getFile(req, res) {
+    const { id } = req.params;
+    const document = await authClient.findFolder(id);
+    const token = req.headers['x-token'];
+    const user = await authClient.FindUserWithToken(token);
+    if (!document) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    if (document.isPublic === false && (!user || user.id !== document.userId)) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    if (document.type === 'folder') {
+      return res.status(400).json({ error: "A folder doesn't have content" });
+    }
+    const { localPath } = document;
+    // console.log(localPath)
+    // const  filePath = GenerateFilePath(FOLDER_PATH, localPath);
+    const mimeType = GetMimeType(document.name);
+    // console.log(filePath)
+    try {
+      const fileContent = await ReadFileContent(localPath);
+      // console.log(fileContent)
+      res.set('Content-Type', mimeType);
+      res.status(200).send(fileContent);
+    } catch (error) {
+      return res.status(404).json({ error: 'Not found' });
+    }
   }
 }
 

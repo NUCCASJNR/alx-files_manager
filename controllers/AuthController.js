@@ -5,7 +5,7 @@
 Auth Controller to handle Authorization
  */
 
-import authClient from "../utils/auth";
+import authClient from '../utils/auth';
 import redisClient from '../utils/redis';
 
 class AuthController {

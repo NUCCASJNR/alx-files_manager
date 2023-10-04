@@ -5,7 +5,7 @@
 User controller
  */
 
-import authClient from "../utils/auth";
+import authClient from '../utils/auth';
 
 class UsersController {
   static async postNew(req, res) {
